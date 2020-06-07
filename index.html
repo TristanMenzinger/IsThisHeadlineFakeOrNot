@@ -47,10 +47,10 @@
         margin-top: -20px;
     }
     .card.overlay.overlay-left {
-        background-color: red;
+        background-color: rgb(200, 0, 0);
     }
     .card.overlay.overlay-right {
-        background-color: green;
+        background-color: rgb(109, 168, 50);
     }
 
     body {
@@ -151,11 +151,11 @@
     }
     #container-title span.red {
         text-decoration: underline;
-        text-decoration-color: red;
+        text-decoration-color: rgb(200, 0, 0);
     }
     #container-title span.green {
         text-decoration: underline;
-        text-decoration-color: green;
+        text-decoration-color: rgb(109, 168, 50);
     }
 
 </style>
@@ -272,10 +272,10 @@
             const x_transform = this.initial_x_offset + percentage_progress * this.div.getBoundingClientRect().width;
             const rotation = this.initial_rotation + 10 * percentage_progress;
 
-            this.div.style.opacity = 1 - sigmoid((Math.abs(this.fade_multiplier * percentage_progress) - 0.75) * 10);
+            // this.div.style.opacity = 1 - sigmoid((Math.abs(this.fade_multiplier * percentage_progress) - 0.75) * 10);
             this.div.style.transform = `translateX(${x_transform}px) translateY(${this.initial_y_offset}px) rotate(${rotation}deg)`
 
-            const opacity = sigmoid((Math.abs(this.overlay_multiplier * percentage_progress) - 0.5) * 10);
+            const opacity = sigmoid((Math.abs(this.overlay_multiplier * percentage_progress) - 0.5) * 5);
             console.log(opacity)
             if (percentage_progress < 0) {
                 this.overlay_left.style.opacity = opacity;
