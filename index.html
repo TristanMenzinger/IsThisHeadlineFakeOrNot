@@ -382,9 +382,13 @@
 
         next() {
             this.index = this.index - 1;
-            this.current = this.cards[this.index];
-            console.log(this.index);
-            this.current.activate();
+            if(this.index >= 0) {
+                this.current = this.cards[this.index];
+                console.log(this.index);
+                this.current.activate();
+            } else {
+                document.getElementById('container-wrapper').style.display = 'none';
+            }
         }
     }
 
