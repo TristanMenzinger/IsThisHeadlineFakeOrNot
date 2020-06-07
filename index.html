@@ -224,7 +224,8 @@
         }
 
         activate() {
-            this.div.ontouchstart = () => {
+
+            this.div.ontouchstart = (event) => {
                 this.div.classList.remove("smooth");
                 this.start_x = event.touches[0].clientX
                 this.start_y = event.touches[0].clientY
@@ -232,13 +233,13 @@
             }
             this.div.ontouchmove = (event) => {
                 const percentage_progress = (event.touches[0].clientX - this.start_x) / this.width;
-                if (Math.abs(percentage_progress) < this.threshold_go)
-                    this.animate_progress(percentage_progress);
-                else
-                    this.go(percentage_progress / Math.abs(percentage_progress));
+                this.set_progress(percentage_progress);
             }
-            this.div.ontouchend = () => {
-                if (!this.gone)
+            this.div.ontouchend = (event) => {
+                const percentage_progress = (event.changedTouches[0].clientX - this.start_x) / this.width;
+                if (Math.abs(percentage_progress) > this.threshold_go)
+                    this.go(percentage_progress / Math.abs(percentage_progress));       
+                else
                     this.comeback();
             }
 
@@ -253,7 +254,7 @@
             //     if (drag) {
             //         const percentage_progress = (event.clientX - this.start_x) / this.width;
             //         if (Math.abs(percentage_progress) < this.threshold_go)
-            //             this.animate_progress(percentage_progress);
+            //             this.set_progress(percentage_progress);
             //         else
             //             this.go(percentage_progress / Math.abs(percentage_progress));
             //     }
@@ -271,7 +272,7 @@
         }
 
 
-        animate_progress(percentage_progress) {
+        set_progress(percentage_progress) {
             if (!this.gone) {
                 const x_transform = this.initial_x_offset + percentage_progress * this.width;
                 const rotation = this.initial_rotation + 10 * percentage_progress;
@@ -302,7 +303,7 @@
         go(direction) {
             if (!this.gone) {
                 this.div.classList.add("smooth");
-                this.animate_progress(direction * 2);
+                this.set_progress(direction * 2);
                 setTimeout(() => {
                     this.div.classList.add("hide");
                 }, 1000);
