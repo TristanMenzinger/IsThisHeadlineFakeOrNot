@@ -64,6 +64,10 @@
         float: right;
     }
 
+    .card-difficulty {
+        margin: 0px;
+    }
+
     .card-text {
         padding: 1.25rem;
     }
@@ -196,13 +200,13 @@
 <body>
     <div id="difficulty">
         <h1>Choose a difficulty</h1>
-        <a role="button" href="?difficulty=easy" class="btn btn-outline-success">
+        <a role="button" href="?difficulty=Easy" class="btn btn-outline-success">
             Easy
         </a>
-        <a role="button" href="?difficulty=medium" class="btn btn-outline-warning">
+        <a role="button" href="?difficulty=Medium" class="btn btn-outline-warning">
             Medium
         </a>
-        <a role="button" href="?difficulty=hard" class="btn btn-outline-danger">
+        <a role="button" href="?difficulty=Hard" class="btn btn-outline-danger">
             Hard
         </a>
     </div>
@@ -261,6 +265,7 @@
                     <div class="card overlay overlay-right">Real</div>
                     <div class="card-body">
                         <p class="card-count">${this.count}/10</p>
+                        <p class="card-difficulty">Difficulty: <span style="color: ${difficulty === "Easy" ? '#28a745' : difficulty === "Medium" ? '#ffc107' : '#dc3545'}">${difficulty}</span></p>
                         <!-- <h5 class="card-title">Special title treatment</h5> -->
                         <p class="card-text">${this.title}</p>
                     </div>
@@ -440,6 +445,16 @@
         `'Design My Post': Coffee and Fruit in the Craft, With Thoughts About The Celery Box`,
     ];
 
+    function shuffle(a) {
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+
+    shuffle(headlines);
+    
     cards = []
     for (let i=0; i < 10; i++) {
         cards.push(new Card(headlines[i], 10 - i));
