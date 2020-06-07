@@ -3,6 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 </head>
 <style>
     html, body {
@@ -13,7 +14,7 @@
         overflow: hidden;
     }
 
-    .card {
+    .swipe-card {
         position: absolute;
 
         margin: auto;
@@ -26,50 +27,39 @@
 
         will-change: transform;
     }
-    .card.smooth {
+    .swipe-card.smooth {
         transition: 1s ease-in-out;
     }
-    .card.hide {
+    .swipe-card.hide {
         display: none;
     }
 
-    .card.smooth > .overlay {
+    .swipe-card.smooth > .overlay {
         transition: 0.5s ease-in-out;
         will-change: transform;
     }
-    .overlay {
-        text-align: center;
+    .swipe-card.overlay {
+        display: flex;
         justify-content: center;
+
         font-size: 50pt;
         font-weight: 600;
         color: white;
+
         opacity: 0;
 
         height: 100%;
         width: 100%;
         margin-top: -20px;
     }
-    .card.overlay.overlay-left {
+    .swipe-card.overlay span {
+        align-self: center;
+    }
+    .swipe-card.overlay.overlay-left {
         background-color: rgb(200, 0, 0);
     }
-    .card.overlay.overlay-right {
+    .swipe-card.overlay.overlay-right {
         background-color: rgb(109, 168, 50);
-    }
-
-    .card-body {
-        padding: 0px;
-    }
-
-    .card-count {
-        float: right;
-    }
-
-    .card-difficulty {
-        margin: 0px;
-    }
-
-    .card-text {
-        padding: 1.25rem;
     }
 
     body {
@@ -98,13 +88,15 @@
         flex-basis: 40%;
         padding: 20px;
         overflow: none;
-        /*transition: box-shadow 0.3s ease-in-out;*/
     }
-    .headline:hover.shadow-lg{
-        /*box-shadow: 0 1rem 3rem rgba(0,0,0,0.3)!important;*/
-        /*transition: box-shadow 0.3s ease-in-out;*/
+    .swipe-card .card-body {
+        display: flex;
+        flex-direction: column;
+        padding: 0px;
     }
-    .headline .card-text {
+    .card-text {
+        padding: 15px;
+
         max-height: 90%;
         overflow: hidden;
 
@@ -112,24 +104,20 @@
         font-family: Helvetica, Roboto, Arial;
         font-weight: 700;
     }
-    .headline .card-buttons button {
-        padding-left: 0px;
-        line-height: 12px;
-        text-decoration: underline;
-    }
 
-    .headline .placeholder {
+    .card-info {
+        display: flex;
+    }
+    .card-count {
         margin-left: auto;
-        width: 1px;
-    }
-    .headline .btn-link {
         color: darkgray;
-        padding: 10;
-    } 
+    }  
 
-    .break {
-        flex-basis: 100%;
-        height: 0;
+    .card-difficulty {
+        margin-left: 5px;
+    }
+
+    .card-difficulty {
     }
 
     #difficulty {
@@ -142,12 +130,14 @@
         flex-direction: column;
 
         align-items: center;
-        justify-content: center;
     }
 
     #difficulty a {
-        margin-top: 1.25rem;
+        margin-bottom: 1.5rem;
         width: 100px;
+    }
+    #difficulty .btn-outline-secondary {
+        border: none;
     }
 
     #info-done {
@@ -173,8 +163,7 @@
 
     #container-title {
         align-self: center;
-        padding: 2em;
-        padding-left: 3em;
+        padding: 3em;
         padding-bottom: 2em;
 
         width: 100%;
@@ -186,31 +175,86 @@
     #container-title > *:not(:first-child) {
         margin-top: -15px;
     }
-    #container-title span.red {
+    #container-title span.red, #question span.red {
         text-decoration: underline;
         text-decoration-color: rgb(200, 0, 0);
     }
-    #container-title span.green {
+    #container-title span.green, #question span.green {
         text-decoration: underline;
         text-decoration-color: rgb(109, 168, 50);
+    }
+    #container-title .instructions {
+        font-size: 10pt;
+        color: darkgray;
+    }
+
+    #difficulty #difficulty-picker {
+        display: flex;
+        flex-direction: column;
+        /*margin-top: auto;*/
+        /*margin-bottom: auto;*/
+
+
+        justify-content: center;
+        align-items: center;
+
+        height: calc(100% - 3em - 10em);
+        width: 80%;
+        max-width: 400px;
+    }
+
+    #info-done-results {
+        display: flex;
+        width: 100%;
+        padding: 3em;
+        flex-direction: column;
+    }
+    #info-done-results .info-card {
+        width: 100%;
+        margin-bottom: 0.5em;
+    }
+    .red {
+        color: rgb(200, 0, 0);;
+    }
+    .green {
+        color: rgb(109, 168, 50);
+    }
+    .info-card i {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        color: darkgray;
+    }
+    .info-card .score {
+        font-size: 10pt;
+    }
+    .info-card .title {
+        font-weight: 700;
     }
 
 </style>
 
 <body>
     <div id="difficulty">
-        <h1>Choose a difficulty</h1>
-        <a role="button" href="?difficulty=Easy" class="btn btn-outline-success">
-            Easy
-        </a>
-        <a role="button" href="?difficulty=Medium" class="btn btn-outline-warning">
-            Medium
-        </a>
-        <a role="button" href="?difficulty=Hard" class="btn btn-outline-danger">
-            Hard
-        </a>
+        <div id="container-title">
+            <h4>Is this Headline</h4>
+            <h1><span class="red">fake</span> or <span class="green">not</span>?</h1>
+        </div>
+        <div id="difficulty-picker">
+            <a role="button" href="?difficulty=Easy" class="btn btn-outline-success">
+                Easy
+            </a>
+            <a role="button" href="?difficulty=Medium" class="btn btn-outline-warning">
+                Medium
+            </a>
+            <a role="button" href="?difficulty=Hard" class="btn btn-outline-danger">
+                Hard
+            </a>
+            <a role="button" href="?difficulty=Hard" class="btn btn-outline-secondary">
+                Mixed
+            </a>
+        </div>
     </div>
-
     <div id="info-done">
         <h1>All done.</h1>
         <span>
@@ -219,15 +263,44 @@
             <h6>right.</h6>
         </span>
         <span>
-        <h5><a href="javascript:history.go(0)">Play again</a></h5>
-        <h6>or</h6>
-        <h5><a href="?">Change difficulty</a></h5>
+            <h5><a href="javascript:history.go(0)">Play again</a></h5>
+            <h6>or</h6>
+            <h5><a href="?">Change difficulty</a></h5>
         </span>
+        <div id="info-done-results">
+            <div class="card info-card">
+                <div class="card-body">
+                    <i class="fas fa-check"></i>
+                    <span class="title">Lisa Joy Joins Chris Pratt In 'Raising Hope'</span>
+                    <span class="score"><span class="red">is fake</span> and you <span class="red">said it was fake</span>.</span>
+                </div>
+            </div>
+            <div class="card info-card">
+                <div class="card-body">
+                    <i class="fas fa-times"></i>
+                    <span class="title">Kata Ost: Direct All Children To Holiday Book Club</span>
+                    <span class="score"><span class="green">is real</span> and you <span class="red">said it was fake</span>.</span>
+                </div>
+            </div>
+<!--             <div class="card">
+                <div class="card-body">
+                    <span>Laura Bicker, Former DNC Chair, Discusses Getting Back to Work After a Breakup</span>
+                    <span class="badge badge-success">Right</span>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <span>The Easiest Slut-shaming Tax Ways To Get Rid Of The Smugness</span>
+                    <span class="badge badge-success">Right</span>
+                </div>
+            </div> -->
+        </div>
     </div>
     <div id="container-wrapper">
         <div id="container-title">
             <h4>Is this Headline</h4>
             <h1><span class="red">fake</span> or <span class="green">not</span>?</h1>
+            <span class="instructions">Swipe right for real, left for fake.</span>
         </div>
         <div id="container-headlines" class="rel-max-wrapper">
         </div>
@@ -255,17 +328,19 @@
             this.div.style.transform = `translateX(${this.initial_x_offset}px) translateY(${this.initial_y_offset}px) rotate(${this.initial_rotation}deg)`;
 
             this.gone = false;;
-            
+
         }
 
         _create_div() {
             let template = `
                 <div class="card swipe-card headline">
-                    <div class="card overlay overlay-left">Fake</div>
-                    <div class="card overlay overlay-right">Real</div>
+                    <div class="swipe-card overlay overlay-left"><span>Fake</span></div>
+                    <div class="swipe-card overlay overlay-right"><span>Real</span></div>
                     <div class="card-body">
-                        <p class="card-count">${this.count}/10</p>
-                        <p class="card-difficulty">Difficulty: <span style="color: ${difficulty === "Easy" ? '#28a745' : difficulty === "Medium" ? '#ffc107' : '#dc3545'}">${difficulty}</span></p>
+                        <div class="card-info">
+                            <p class="card-count">${this.count}/10</p>
+                            <p class="card-difficulty"><span style="color: ${difficulty === "Easy" ? '#28a745' : difficulty === "Medium" ? '#ffc107' : '#dc3545'}">${difficulty}</span></p>
+                        </div>
                         <!-- <h5 class="card-title">Special title treatment</h5> -->
                         <p class="card-text">${this.title}</p>
                     </div>
@@ -288,9 +363,8 @@
             this.div.ontouchend = (event) => {
                 const percentage_progress = (event.changedTouches[0].clientX - this.start_x) / this.width;
                 if (Math.abs(percentage_progress) > this.threshold_go) {
-                    this.go(percentage_progress / Math.abs(percentage_progress));       
-                }
-                else {
+                    this.go(percentage_progress / Math.abs(percentage_progress));
+                } else {
                     this.comeback();
                 }
             }
@@ -382,12 +456,14 @@
 
         next() {
             this.index = this.index - 1;
-            if(this.index >= 0) {
+            if (this.index >= 0) {
                 this.current = this.cards[this.index];
                 console.log(this.index);
                 this.current.activate();
             } else {
-                document.getElementById('container-wrapper').style.display = 'none';
+                setTimeout(() => {
+                    document.getElementById('container-wrapper').style.zIndex = '-100';
+                }, 300);
             }
         }
     }
@@ -405,15 +481,15 @@
     const queryParams = new URLSearchParams(window.location.search);
     const difficulty = queryParams.get('difficulty');
 
-    if(difficulty) {
+    if (difficulty) {
         const xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 const headlines = JSON.parse(this.responseText);
                 cards = []
-                for (let i=0; i < 10; i++) {
+                for (let i = 0; i < 10; i++) {
                     cards.push(new Card(headlines[i], 10 - i));
-                }  
+                }
 
                 container = document.querySelector("#container-headlines");
                 for (let card of cards) {
