@@ -14,9 +14,8 @@
 	}
 
 	.card {
-		position: absolute;
+		display: none;
 
-		position: absolute;
 		margin: auto;
 		left: 0;
 		right: 0;
@@ -223,7 +222,8 @@
 		return wrapper.firstElementChild;
 	}
 	let container = document.querySelector(".rel-max-wrapper")
-	let template = `			<div class="card swipe-card headline shadow-lg">
+	let template = `			
+			<div class="card swipe-card headline shadow-lg">
 				<div class="card overlay overlay-left">
 					Fake
 				</div>
