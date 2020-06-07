@@ -1,73 +1,253 @@
 <html>
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <style>
+    html, body {
+        margin: 0px;
+        padding: 0px;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .card {
+        position: absolute;
+
+        position: absolute;
+        margin: auto;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+
+        height: 80vh;
+        width: 80vw;
+    }
+    .card.smooth {
+        transition: 1s ease-in-out;
+    }
+    .card.hide {
+        display: none;
+    }
+
+    .card.smooth > .card.overlay {
+        transition: 0.5s ease-in-out;
+    }
+    .card.overlay {
+        text-align: center;
+        justify-content: center;
+        font-size: 50pt;
+        font-weight: 600;
+        color: white;
+        opacity: 0;
+    }
+    .card.overlay.overlay-left {
+        background-color: red;
+    }
+    .card.overlay.overlay-right {
+        background-color: green;
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+    }
+
     #container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+        align-self: center;
+        height: 100vh;
+        width: 500px;
+        overflow: hidden;
+    }
 
-.headline {
-    flex-grow: 0;
-    flex-shrink: 0;
-    flex-basis: 40%;
-    padding: 3em;
-    transition: box-shadow 0.3s ease-in-out;
-}
-.headline:hover.shadow-lg{
-	box-shadow: 0 1rem 3rem rgba(0,0,0,0.3)!important;
-	transition: box-shadow 0.3s ease-in-out;
-}
-.headline .card-text {
-	font-size: 20pt;
-	/*font-family: "Times New Roman";*/
-}
-.headline .btn-fw {
-	width: 120px;
-	height: 40px;
-	margin-right: 10px;
-}
-.headline .placeholder {
-	margin-left: auto;
-	width: 1px;
-}
-.headline .card-buttons {
-	display: flex;
-}
-.headline .btn-link {
-	color: darkgray;
-	padding-left: 6px;
-	padding-right: 6px;
-}
+    /* Styling */
+    .headline {
+        flex-grow: 0;
+        flex-shrink: 0;
+        flex-basis: 40%;
+        padding: 3em;
+        transition: box-shadow 0.3s ease-in-out;
+    }
+    .headline:hover.shadow-lg{
+        box-shadow: 0 1rem 3rem rgba(0,0,0,0.3)!important;
+        transition: box-shadow 0.3s ease-in-out;
+    }
+    .headline .card-text {
+        font-size: 20pt;
+        /*font-family: "Times New Roman";*/
+    }
 
-.break {
-  flex-basis: 100%;
-  height: 0;
-}
+    .headline .placeholder {
+        margin-left: auto;
+        width: 1px;
+    }
+    .headline .btn-link {
+        color: darkgray;
+        padding: 10;
+    } 
+
+    .break {
+        flex-basis: 100%;
+        height: 0;
+    }
+
 </style>
 
 <body>
     <div id="container">
-        <div class="card headline shadow-lg">
-            <div class="card-body">
-                <!-- <h5 class="card-title">Special title treatment</h5> -->
-                <p class="card-text">"Elizabeth Warren Is Well: It's Just 'Baby Moves' Now, Not the All-Out War"</p>
-                <div class="break"></div>
-                <div class="card-buttons">
-                    <button type="button" class="btn btn-success btn-fw">Real</button>
-                    <button type="button" class="btn btn-danger btn-fw">Fake</button>
-                    <div class="placeholder"></div>
-                    <button type="button" class="btn btn-link x">Report</button>
-                    <button type="button" class="btn btn-link x">Too Easy</button>
+        <div class="rel-max-wrapper">
+            <div class="card swipe-card headline shadow-lg">
+                <div class="card overlay overlay-left">
+                    Fake
+                </div>
+                <div class="card overlay overlay-right">
+                    Real
+                </div>
+                <div class="card-body">
+                    <!-- <h5 class="card-title">Special title treatment</h5> -->
+                    <p class="card-text">"Elizabeth Warren Is Well: It's Just 'Baby Moves' Now, Not the All-Out War"</p>
+                    <div class="break"></div>
+                    <div class="card-buttons">
+                        <div class="placeholder"></div>
+                        <button type="button" class="btn btn-link">Report</button>
+                        <button type="button" class="btn btn-link">Too Easy</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+    class Card {
+        constructor(element, settings) {
+            this.div = element
+
+            this.overlay_left = this.div.querySelector(".overlay-left");
+            this.overlay_right = this.div.querySelector(".overlay-right");
+
+            settings = settings ? settings : {};
+            this.threshold_go = settings["threshold_go"] ? settings["threshold_go"] : 0.75
+            this.overlay_multiplier = settings["overlay_multiplier"] ? settings["overlay_multiplier"] : 1.5
+            this.fade_multiplier = settings["fade_multiplier"] ? settings["fade_multiplier"] : 0.8
+
+            this.width = this.div.getBoundingClientRect().width
+            this.gone = false;
+        }
+
+        activate() {
+            this.div.ontouchstart = () => {
+                this.div.classList.remove("smooth");
+                this.start_x = event.touches[0].clientX
+                this.start_y = event.touches[0].clientY
+            }
+            this.div.ontouchmove = (event) => {
+                const percentage_progress = (event.touches[0].clientX - this.start_x) / this.width;
+                if (Math.abs(percentage_progress) < this.threshold_go)
+                    this.animate_progress(percentage_progress);
+                else
+                    this.go(percentage_progress / Math.abs(percentage_progress));
+            }
+            this.div.ontouchend = () => {
+                if (!this.gone)
+                    this.comeback();
+            }
+        }
+
+        deactivate() {
+            this.div.ontouchstart = () => {}
+            this.div.ontouchmove = () => {}
+            this.div.ontouchend = () => {}
+        }
+
+
+        animate_progress(percentage_progress) {
+            const x_transform = percentage_progress * this.width;
+            const rotation = 10 * percentage_progress;
+            this.div.style.opacity = 1 - Math.abs(percentage_progress * this.fade_multiplier);
+            this.div.style.transform = `translateX(${x_transform}px) rotate(${rotation}deg)`
+
+            if (percentage_progress < 0)
+                this.overlay_left.style.opacity = Math.abs(this.overlay_multiplier * percentage_progress);
+            else
+                this.overlay_right.style.opacity = Math.abs(this.overlay_multiplier * percentage_progress);
+
+        }
+
+        comeback() {
+            this.div.classList.add("smooth");
+            this.overlay_left.style.opacity = 0;
+            this.overlay_right.style.opacity = 0;
+            this.div.style.opacity = 1;
+            this.div.style.transform = `translateX(0px) rotate(0deg)`
+        }
+
+        go(direction) {
+            if(!this.gone) {
+                this.gone = true;
+                this.div.classList.add("smooth");
+                this.animate_progress(direction * 2);
+                setTimeout(() => {
+                    this.div.classList.add("hide");
+                }, 1000);
+                if(this.stack)
+                    this.stack.next()
+            }
+        }
+    }
+
+    class Stack {
+        constructor(cards) {
+            this.cards = cards;
+            for(let card of cards) {
+                card.stack = this;
+            }
+
+            this.index = this.cards.length - 1;
+            this.current = this.cards[this.index];
+            this.current.activate();
+        }
+
+        next() {
+            this.index = this.index - 1;
+            this.current = this.cards[this.index];
+            console.log(this.index)
+            this.current.activate();
+        } 
+    }
+
+    let div_from_template = (filled_template_string) => {
+        let wrapper = document.createElement("div");
+        wrapper.innerHTML = filled_template_string;
+        return wrapper.firstElementChild;
+    }
+    let container = document.querySelector(".rel-max-wrapper")
+    let template = `            <div class="card swipe-card headline shadow-lg">
+                <div class="card overlay overlay-left">
+                    Fake
+                </div>
+                <div class="card overlay overlay-right">
+                    Real
+                </div>
+                <div class="card-body">
+                    <!-- <h5 class="card-title">Special title treatment</h5> -->
+                    <p class="card-text">"Elizabeth Warren Is Well: It's Just 'Baby Moves' Now, Not the All-Out War"</p>
+                    <div class="break"></div>
+                    <div class="card-buttons">
+                        <div class="placeholder"></div>
+                        <button type="button" class="btn btn-link x">Report</button>
+                        <button type="button" class="btn btn-link x">Too Easy</button>
+                    </div>
+                </div>
+            </div>`
+    for (x = 0; x < 10; x++) {
+        container.appendChild(div_from_template(template));
+    }
+
+    cards = Array.prototype.slice.call(document.querySelectorAll(".swipe-card"));
+    new Stack(cards.map(c => new Card(c)));
+    </script>
 </body>
 
 </html>
