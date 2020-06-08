@@ -268,7 +268,7 @@
             <h5><a href="?">Change difficulty</a></h5>
         </span>
         <div id="info-done-results">
-            <div class="card info-card">
+<!--             <div class="card info-card">
                 <div class="card-body">
                     <i class="fas fa-check"></i>
                     <span class="title">Lisa Joy Joins Chris Pratt In 'Raising Hope'</span>
@@ -281,8 +281,8 @@
                     <span class="title">Kata Ost: Direct All Children To Holiday Book Club</span>
                     <span class="score"><span class="green">is real</span> and you <span class="red">said it was fake</span>.</span>
                 </div>
-            </div>
-<!--             <div class="card">
+            </div> -->
+            <!--             <div class="card">
                 <div class="card-body">
                     <span>Laura Bicker, Former DNC Chair, Discusses Getting Back to Work After a Breakup</span>
                     <span class="badge badge-success">Right</span>
@@ -325,7 +325,8 @@
             this.initial_x_offset = (Math.random() - 0.5) * 5;
             this.initial_y_offset = (Math.random() - 0.5) * 5;
 
-            this.div.style.transform = `translateX(${this.initial_x_offset}px) translateY(${this.initial_y_offset}px) rotate(${this.initial_rotation}deg)`;
+            // Hide out of view by default
+            this.div.style.transform = `translateX(${screen.width+Math.random()*200}px) translateY(${(Math.random()-0.5)*200}px) rotate(10deg)`;
 
             this.gone = false;;
 
@@ -346,6 +347,12 @@
                     </div>
                 </div>`;
             this.div = div_from_template(template);
+        }
+
+        show() {
+            this.div.classList.add("smooth");
+            this.div.style.transform = `translateX(${this.initial_x_offset}px) translateY(${this.initial_y_offset}px) rotate(${this.initial_rotation}deg)`;
+
         }
 
         activate() {
@@ -454,6 +461,13 @@
             this.current.activate();
         }
 
+        async show_all() {
+            for (let card of this.cards) {
+                await sleep(Math.random() * 100);
+                card.show()
+            }
+        }
+
         next() {
             this.index = this.index - 1;
             if (this.index >= 0) {
@@ -478,6 +492,32 @@
         return 1 / (1 + Math.exp(-t));
     }
 
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function show_headlines(headlines) {
+
+        let cards = []
+        for (let i = 0; i < 10; i++) {
+            cards.push(new Card(headlines[i], 10 - i));
+        }
+
+        container = document.querySelector("#container-headlines");
+        for (let card of cards) {
+            container.appendChild(card.div);
+        }
+        let stack = new Stack(cards);
+
+        document.getElementById('container-wrapper').style.zIndex = '100';
+        stack.show_all();
+        document.getElementById('container-wrapper').style.display = 'flex';
+
+        setTimeout(function() {
+            document.getElementById('info-done').style.display = 'flex';
+        }, 1000);
+    }
+
     const queryParams = new URLSearchParams(window.location.search);
     const difficulty = queryParams.get('difficulty');
 
@@ -486,19 +526,7 @@
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 const headlines = JSON.parse(this.responseText);
-                cards = []
-                for (let i = 0; i < 10; i++) {
-                    cards.push(new Card(headlines[i], 10 - i));
-                }
-
-                container = document.querySelector("#container-headlines");
-                for (let card of cards) {
-                    container.appendChild(card.div);
-                }
-                new Stack(cards);
-
-                document.getElementById('container-wrapper').style.display = 'flex';
-                document.getElementById('info-done').style.display = 'flex';
+                show_headlines(headlines);
             }
         };
         xhttp.open("POST", "https://get-headlines.fake-or-not.workers.dev");
