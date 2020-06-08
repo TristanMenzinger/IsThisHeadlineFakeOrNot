@@ -1,0 +1,286 @@
+html,
+body {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.swipe-card {
+    position: absolute;
+
+    margin: auto;
+    left: 0;
+    right: 0;
+
+    height: calc(100% - 3em);
+    width: 80%;
+    max-width: 400px;
+
+    will-change: transform;
+}
+
+.swipe-card.smooth {
+    transition: 1s ease-in-out;
+}
+
+.swipe-card.hide {
+    display: none;
+}
+
+.swipe-card.smooth>.overlay {
+    transition: 0.5s ease-in-out;
+    will-change: transform;
+}
+
+.swipe-card.overlay {
+    display: flex;
+    justify-content: center;
+
+    font-size: 50pt;
+    font-weight: 600;
+    color: white;
+
+    opacity: 0;
+
+    height: 100%;
+    width: 100%;
+    margin-top: -20px;
+}
+
+.swipe-card.overlay span {
+    align-self: center;
+}
+
+.swipe-card.overlay.overlay-left {
+    background-color: rgb(200, 0, 0);
+}
+
+.swipe-card.overlay.overlay-right {
+    background-color: rgb(109, 168, 50);
+}
+
+body {
+    display: flex;
+    justify-content: center;
+}
+
+#container-wrapper {
+    display: none;
+    /* flex */
+    flex-direction: column;
+    align-self: center;
+    overflow: hidden;
+    height: 100%;
+    width: 100vw;
+}
+
+.rel-max-wrapper {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+/* Styling */
+.headline {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 40%;
+    padding: 20px;
+    overflow: none;
+}
+
+.swipe-card .card-body {
+    display: flex;
+    flex-direction: column;
+    padding: 0px;
+}
+
+.card-text {
+    padding: 15px;
+
+    max-height: 90%;
+    overflow: hidden;
+
+    font-size: 20pt;
+    font-family: Helvetica, Roboto, Arial;
+    font-weight: 700;
+}
+
+.card-info {
+    display: flex;
+}
+
+.card-count {
+    margin-left: auto;
+    color: darkgray;
+}
+
+.card-difficulty {
+    margin-left: 5px;
+}
+
+.card-difficulty {}
+
+#difficulty {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    display: none;
+    /* flex */
+    flex-direction: column;
+
+    align-items: center;
+}
+
+#difficulty a {
+    margin-bottom: 1.5rem;
+    width: 100px;
+}
+
+#difficulty .btn-outline-secondary {
+    border: none;
+}
+
+#info-done {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    display: none;
+    /* flex */
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+}
+
+#info-done>span {
+    display: flex;
+    align-items: baseline;
+    flex-direction: row;
+}
+
+#info-done>span>* {
+    margin-right: 5px;
+}
+
+#container-title {
+    align-self: center;
+    padding: 3em;
+    padding-bottom: 2em;
+
+    width: 100%;
+    max-width: 500px;
+}
+
+#container-title h1 {
+    font-weight: 700;
+}
+
+#container-title>*:not(:first-child) {
+    margin-top: -15px;
+}
+
+#container-title span.red,
+#question span.red {
+    text-decoration: underline;
+    text-decoration-color: rgb(200, 0, 0);
+}
+
+#container-title span.green,
+#question span.green {
+    text-decoration: underline;
+    text-decoration-color: rgb(109, 168, 50);
+}
+
+#container-title .instructions {
+    font-size: 10pt;
+    color: darkgray;
+}
+
+#difficulty #difficulty-picker {
+    display: flex;
+    flex-direction: column;
+    /*margin-top: auto;*/
+    /*margin-bottom: auto;*/
+
+
+    justify-content: center;
+    align-items: center;
+
+    height: calc(100% - 3em - 10em);
+    width: 80%;
+    max-width: 400px;
+}
+
+#info-done-results {
+    display: flex;
+    width: 100%;
+    padding: 3em;
+    flex-direction: column;
+}
+
+#info-done-results .info-card {
+    width: 100%;
+    margin-bottom: 0.5em;
+}
+
+.red {
+    color: rgb(200, 0, 0);
+}
+
+.green {
+    color: rgb(109, 168, 50);
+}
+
+.info-card i {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: darkgray;
+}
+
+.info-card .score {
+    font-size: 10pt;
+}
+
+.info-card .title {
+    font-weight: 700;
+}
+
+.last-headline {
+    border: none;
+    padding: 10px;
+    transform: rotate(1deg);
+}
+
+.last-headline .card {
+    padding: 8px;
+    border-color: darkgray;
+    height: 100%;
+}
+
+.last-headline>.card {
+    background-color: white;
+    background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.confetti {
+    position: absolute;
+    height: 10px;
+    width: 10px;
+    z-index: 10000;
+    will-change: transform;
+    transition-timing-function: linear;
+}
+
+#celebration_container {
+    position: absolute;
+    width: 100%;
+    height: 10px;
+}
