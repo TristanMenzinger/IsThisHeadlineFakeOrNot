@@ -319,14 +319,14 @@
             settings = settings ? settings : {};
             this.threshold_go = settings["threshold_go"] ? settings["threshold_go"] : 0.4;
             this.overlay_multiplier = settings["overlay_multiplier"] ? settings["overlay_multiplier"] : 2;
-            this.fade_multiplier = settings["fade_multiplier"] ? settings["fade_multiplier"] : 0.8;
+            this.fade_multiplier = settings["fade_multiplier"] ? settings["fade_multiplier"] : 0.5;
 
             this.initial_rotation = (Math.random() - 0.5) * 5;
             this.initial_x_offset = (Math.random() - 0.5) * 5;
             this.initial_y_offset = (Math.random() - 0.5) * 5;
 
             // Hide out of view by default
-            this.div.style.transform = `translateX(${screen.width+Math.random()*200}px) translateY(${(Math.random()-0.5)*screen.height/3}px) rotate(${(Math.random()-0.5)*20}deg) rotateX(40deg) rotateY(30deg)`;
+            this.div.style.transform = `translateX(${screen.width+Math.random()*200}px) translateY(${(Math.random()-0.5)*screen.height/3}px) translateZ(1000px) rotate(${(Math.random()-0.5)*20}deg) rotateX(40deg) rotateY(30deg)`;
 
             this.gone = false;;
 
@@ -376,26 +376,30 @@
                 }
             }
 
-            // let drag = false;
-            // this.div.onmousedown = (event) => {
-            //     drag = true;
-            //     this.div.classList.remove("smooth");
-            //     this.start_x = event.clientX
-            //     this.start_y = event.clientY
-            // }
-            // this.div.onmousemove = (event) => {
-            //     if (drag) {
-            //         const percentage_progress = (event.clientX - this.start_x) / this.width;
-            //         if (Math.abs(percentage_progress) < this.threshold_go)
-            //             this.set_progress(percentage_progress);
-            //         else
-            //             this.go(percentage_progress / Math.abs(percentage_progress));
-            //     }
-            // }
-            // this.div.onmouseup = () => {
-            //     drag = false;
-            //     this.div.ontouchend();
-            // }
+            let drag = false;
+            this.div.onmousedown = (event) => {
+                drag = true;
+                this.div.classList.remove("smooth");
+                this.start_x = event.clientX;
+                this.start_y = event.clientY;
+                this.width = this.div.getBoundingClientRect().width;
+            }
+            this.div.onmousemove = (event) => {
+                if (drag) {
+                    const percentage_progress = (event.clientX - this.start_x) / this.width;
+                    this.set_progress(percentage_progress);
+                }
+            }
+            this.div.onmouseup = (event) => {
+                drag = false;
+
+                const percentage_progress = (event.clientX - this.start_x) / this.width;
+                if (Math.abs(percentage_progress) > this.threshold_go) {
+                    this.go(percentage_progress / Math.abs(percentage_progress));
+                } else {
+                    this.comeback();
+                }
+            }
         }
 
         deactivate() {
@@ -463,7 +467,7 @@
 
         async show_all() {
             for (let card of this.cards) {
-                await sleep(100 + Math.random() * 75);
+                await sleep(75 + Math.random() * 50);
                 card.show()
             }
         }
