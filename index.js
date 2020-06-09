@@ -165,31 +165,52 @@ class Card {
 
 function add_progress(percent_to_add = 10) {
     let progress = document.querySelector(".progress");
+    let count = document.querySelector(".count");
     let progressbar = document.querySelector(".progressbar");
     let container = document.querySelector("#container-streak");
 
     if (progress.percent == null)
         progress.percent = 0;
 
-    progress.percent = progress.percent + percent_to_add;
+    old_progress = progress.percent
+    new_progress = progress.percent + percent_to_add;
+    progress.percent = new_progress;
 
-    if (progress.percent > 90)
+    console.log(old_progress, new_progress)
+
+    if (old_progress < 90 && new_progress >= 90)
         animate(container, "shake-bottom3");
-    else if (progress.percent > 80)
+
+    if (old_progress < 80 && new_progress >= 80)
         animate(container, "shake-bottom2");
-    else if (progress.percent > 70)
+
+    if (old_progress < 70 && new_progress >= 70)
         animate(container, "shake-bottom1");
+
+    if (old_progress < 110 && new_progress >= 110) {
+        container.classList.add("max", "max-1");
+        animate(container, "shake-bottom1");
+    } else if (old_progress < 150 && new_progress >= 150) {
+        container.classList.add("max", "max-2");
+        animate(container, "shake-bottom2");
+    } else if (old_progress < 200 && new_progress >= 200) {
+        container.classList.add("max", "max-3");
+        animate(container, "shake-bottom3");
+    } else if (old_progress < 250 && new_progress >= 250) {
+        container.classList.add("max", "max-4");
+        animate(container, "shake-bottom3");
+    } else if (new_progress > 100) {
+        animate(container, "shake-bottom1");
+    }
 
     progress.style.width = (progress.percent >= 100 ? 100 : progress.percent) + "%";
 
-    if (progress.percent >= 120)
-        container.classList.add("max");
+    count.textContent = new_progress / percent_to_add;
+    animate(count, "highlight");
 
-    if (progress.percent >= 150)
-        confetti_rain(color="orange", amount=Math.max(250, 25 + progress.percent/2));
 }
 
-function animate(element, animation_class, time=500) {
+function animate(element, animation_class, time = 500) {
     element.classList.add(animation_class)
     setTimeout(() => {
         element.classList.remove(animation_class)
@@ -200,56 +221,63 @@ function delete_progress() {
     let progress = document.querySelector(".progress");
     let progressbar = document.querySelector(".progressbar");
     let container = document.querySelector("#container-streak");
+    let count = document.querySelector(".count");
 
     container.classList.remove("max");
+    container.classList.remove("max-1");
+    container.classList.remove("max-2");
+    container.classList.remove("max-3");
+    container.classList.remove("max-4");
 
     animate(progressbar, "bounce-right");
 
     progress.percent = 0;
     progress.style.width = progress.percent + "%";
+
+    count.textContent = "";
 }
 
-async function confetti_rain(color="red", amount=150) {
-        let celebration_container = document.getElementById("celebration_container");
-        let confetti = [];
-        for (let x = 0; x < amount; x++) {
-            let c = document.createElement("div")
-            c.classList.add("confetti")
+async function confetti_rain(color = "red", amount = 150) {
+    let celebration_container = document.getElementById("celebration_container");
+    let confetti = [];
+    for (let x = 0; x < amount; x++) {
+        let c = document.createElement("div")
+        c.classList.add("confetti")
 
-            c.style.opacity = 0.8;
+        c.style.opacity = 0.8;
 
-            let height = 5 + 20 * Math.random()
+        let height = 5 + 20 * Math.random()
 
-            c.style.height = `${5+5*Math.random()}px`;
-            c.style.width = `${50 / height}px`;
-            // c.style.backgroundColor = `rgb(${255*Math.random()}, ${255*Math.random()}, ${255*Math.random()})`;
-            c.style.backgroundColor = color;
-            c.style.top = -10 + "px";
-            c.style.left = 10 + screen.width * Math.random() * 0.92 + "px";
+        c.style.height = `${5+5*Math.random()}px`;
+        c.style.width = `${50 / height}px`;
+        // c.style.backgroundColor = `rgb(${255*Math.random()}, ${255*Math.random()}, ${255*Math.random()})`;
+        c.style.backgroundColor = color;
+        c.style.top = -10 + "px";
+        c.style.left = 10 + screen.width * Math.random() * 0.92 + "px";
 
-            let drop = (1 + Math.random() * 2) / 1.5;
-            let start = 2 * Math.random();
-            let offset = 0.75;
-            c.style.transition = `all ${drop}s linear ${start}s, opacity linear ${drop-offset}s ${start}s`;
+        let drop = (1 + Math.random() * 2) / 1.5;
+        let start = 2 * Math.random();
+        let offset = 0.75;
+        c.style.transition = `all ${drop}s linear ${start}s, opacity linear ${drop-offset}s ${start}s`;
 
-            celebration_container.appendChild(c)
-            confetti.push(c);
-        }
-
-        for (let c of confetti) {
-            setTimeout(() => {
-                c.style.transform = `translateY(${screen.height/4 + Math.random() * screen.height}px) rotate(${(Math.random()-0.5)*180}deg)`;
-                c.style.opacity = 0;
-            }, 10);
-        }
-
-        setTimeout(() => {
-            console.log(confetti.length)
-            for (let c of confetti) {
-                c.remove();
-            }
-        }, 3000);
+        celebration_container.appendChild(c)
+        confetti.push(c);
     }
+
+    for (let c of confetti) {
+        setTimeout(() => {
+            c.style.transform = `translateY(${screen.height/4 + Math.random() * screen.height}px) rotate(${(Math.random()-0.5)*180}deg)`;
+            c.style.opacity = 0;
+        }, 10);
+    }
+
+    setTimeout(() => {
+        console.log(confetti.length)
+        for (let c of confetti) {
+            c.remove();
+        }
+    }, 3000);
+}
 
 class Stack {
     constructor(cards, empty_callback) {
@@ -262,7 +290,7 @@ class Stack {
 
         this.index = this.cards.length - 1;
         this.current = this.cards[this.index];
-    }  
+    }
 
     add_to_container() {
         let container = document.querySelector("#container-headlines");
@@ -283,7 +311,6 @@ class Stack {
         this.index = this.index - 1;
         if (this.index >= 0) {
             this.current = this.cards[this.index];
-            console.log(this.index);
             this.current.activate();
         } else {
             this.empty_callback();
@@ -315,12 +342,12 @@ function headlines_to_cards(headlines) {
 }
 
 function get_new_headlines() {
-    return fetch("https://get-headlines.fake-or-not.workers.dev", {method: 'post'}).then(response => response.json());
+    return fetch("https://get-headlines.fake-or-not.workers.dev", { method: 'post' }).then(response => response.json());
 }
 
-async function play(empty_callback=play) {
+async function play(empty_callback = play) {
     let cards = headlines_to_cards(await get_new_headlines());
-    let stack = new Stack(cards, empty_callback=empty_callback);
+    let stack = new Stack(cards, empty_callback = empty_callback);
     stack.add_to_container();
     stack.show_all();
 }
@@ -331,8 +358,3 @@ async function init() {
 
     play()
 }
-
-
-
-
-

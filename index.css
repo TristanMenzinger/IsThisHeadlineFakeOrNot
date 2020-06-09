@@ -2,7 +2,7 @@ html,
 body {
     margin: 0px;
     padding: 0px;
-    width: 100%;
+    width: 100vw;
     height: 100%;
     overflow: hidden;
 }
@@ -73,6 +73,9 @@ body {
     overflow: hidden;
     height: 100%;
     width: 100vw;
+
+    /*So the overflow: hidden can work;*/
+    position: relative;
 }
 
 .rel-max-wrapper {
@@ -299,6 +302,33 @@ body {
     height: 100%;
     width: 80%;
     max-width: 400px;
+}
+
+.progressbar .count {
+    position: absolute;
+    /*bottom: 7px;*/
+    bottom: -4px;
+    margin-left: -20px;
+    color: darkgray;
+    font-size: 10pt;
+    text-align: left;
+    text-align: right;
+}
+.progressbar .count.highlight {
+    -webkit-animation: highlightkf 0.5s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+    animation: highlightkf 0.5s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+}
+
+@-webkit-keyframes highlightkf {
+    0%, 100% {
+        transform: scale(1,1);
+    }
+    50% {
+        transform: scale(2,2);
+    }
+    100% {
+        transform: scale(1,1);
+    }
 }
 
 .progressbar .progress {
@@ -540,12 +570,37 @@ body {
 }
 
 /*FIRE*/
+
+#container-streak.max-1 .mo-fire {
+    width: 30px;
+    height: 30px;
+    margin-top: -45px;
+    margin-left: calc(50vw + min(40%, 200px) - 20px);
+}
+
+#container-streak.max-2 .mo-fire {
+    width: 45px;
+    height: 45px;
+    margin-top: -67px;
+    margin-left: calc(50vw + min(40%, 200px) - 27px);
+}
+
+#container-streak.max-3 .mo-fire {
+    width: 60px;
+    height: 60px;
+    margin-top: -90px;
+    margin-left: calc(50vw + min(40%, 200px) - 40px);
+}
+
+#container-streak.max-4 .mo-fire {
+    width: 80px;
+    height: 80px;
+    margin-top: -120px;
+    margin-left: calc(50vw + min(40%, 200px) - 55px);
+}
+
 #container-streak.max .mo-fire {
     opacity: 1;
-    width: 70px;
-    height: 70px;
-    margin-top: -105px;
-    margin-left: calc(50vw + min(40%, 200px) - 45px);
     transition: 0.1s ease-in !important;
 }
 
@@ -553,10 +608,10 @@ body {
     align-items: baseline;
     text-align: center;
 
-    transition: 1s ease-in;
+    transition: width 1s ease-in, height 1s ease-in, opacity 0.2s ease-in;
     opacity: 0;
     margin-left: calc(50vw + min(40%, 200px) - 5px);
-    
+
     margin-top: 0px;
     height: 0px;
     width: 0px;
