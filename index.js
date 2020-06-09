@@ -186,7 +186,7 @@ function add_progress(percent_to_add = 10) {
         container.classList.add("max");
 
     if (progress.percent >= 150)
-        confetti_rain(color="orange", amount=progress.percent);
+        confetti_rain(color="orange", amount=Math.max(250, 25 + progress.percent/2));
 }
 
 function animate(element, animation_class, time=500) {
@@ -238,7 +238,7 @@ async function confetti_rain(color="red", amount=150) {
 
         for (let c of confetti) {
             setTimeout(() => {
-                c.style.transform = `translateY(${screen.height/4 + Math.random() * screen.height/2}px) rotate(${(Math.random()-0.5)*180}deg)`;
+                c.style.transform = `translateY(${screen.height/4 + Math.random() * screen.height}px) rotate(${(Math.random()-0.5)*180}deg)`;
                 c.style.opacity = 0;
             }, 10);
         }
