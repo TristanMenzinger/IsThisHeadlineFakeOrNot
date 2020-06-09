@@ -108,7 +108,7 @@ class Card {
             this.div.style.transform = `translateX(${x_transform}px) translateY(${this.initial_y_offset}px) rotate(${rotation}deg)`;
 
             const opacity = sigmoid((Math.abs(this.overlay_multiplier * percentage_progress) - 0.5) * 5);
-            console.log(opacity);
+            // console.log(opacity);
             if (percentage_progress < 0) {
                 this.overlay_left.style.opacity = opacity;
             } else {
@@ -130,7 +130,7 @@ class Card {
     go(direction) {
         if (!this.gone) {
             this.div.classList.add("smooth");
-            this.set_progress(direction * 2);
+            this.set_progress(direction * 3);
             setTimeout(() => {
                 this.div.classList.add("hide");
             }, 1000);
@@ -148,29 +148,127 @@ class Card {
     }
 
     right() {
-        console.log("make it rain");
-        setTimeout(function() {
-            confetti_rain("red");
-        }, 10)
+        //  console.log("make it rain");
+        //  setTimeout(function() {
+        // confetti_rain();
+        //  }, 10)
+        delete_progress();
     }
     left() {
-        console.log("make it rain");
-        setTimeout(function() {
-            confetti_rain("green");
-        }, 10)
+        // console.log("make it rain");
+        // setTimeout(function() {
+        // confetti_rain();
+        // }, 10)
+        add_progress();
     }
 }
 
+function add_progress(percent_to_add = 10) {
+    let progress = document.querySelector(".progress");
+    let progressbar = document.querySelector(".progressbar");
+    let container = document.querySelector("#container-streak");
+
+    if (progress.percent == null)
+        progress.percent = 0;
+
+    progress.percent = progress.percent + percent_to_add;
+
+    if (progress.percent > 90)
+        animate(container, "shake-bottom3");
+    else if (progress.percent > 80)
+        animate(container, "shake-bottom2");
+    else if (progress.percent > 70)
+        animate(container, "shake-bottom1");
+
+    progress.style.width = (progress.percent >= 100 ? 100 : progress.percent) + "%";
+
+    if (progress.percent >= 120)
+        container.classList.add("max");
+
+    if (progress.percent >= 150)
+        confetti_rain(color="orange", amount=progress.percent);
+}
+
+function animate(element, animation_class, time=500) {
+    element.classList.add(animation_class)
+    setTimeout(() => {
+        element.classList.remove(animation_class)
+    }, time);
+}
+
+function delete_progress() {
+    let progress = document.querySelector(".progress");
+    let progressbar = document.querySelector(".progressbar");
+    let container = document.querySelector("#container-streak");
+
+    container.classList.remove("max");
+
+    animate(progressbar, "bounce-right");
+
+    progress.percent = 0;
+    progress.style.width = progress.percent + "%";
+}
+
+async function confetti_rain(color="red", amount=150) {
+        let celebration_container = document.getElementById("celebration_container");
+        let confetti = [];
+        for (let x = 0; x < amount; x++) {
+            let c = document.createElement("div")
+            c.classList.add("confetti")
+
+            c.style.opacity = 0.8;
+
+            let height = 5 + 20 * Math.random()
+
+            c.style.height = `${5+5*Math.random()}px`;
+            c.style.width = `${50 / height}px`;
+            // c.style.backgroundColor = `rgb(${255*Math.random()}, ${255*Math.random()}, ${255*Math.random()})`;
+            c.style.backgroundColor = color;
+            c.style.top = -10 + "px";
+            c.style.left = 10 + screen.width * Math.random() * 0.92 + "px";
+
+            let drop = (1 + Math.random() * 2) / 1.5;
+            let start = 2 * Math.random();
+            let offset = 0.75;
+            c.style.transition = `all ${drop}s linear ${start}s, opacity linear ${drop-offset}s ${start}s`;
+
+            celebration_container.appendChild(c)
+            confetti.push(c);
+        }
+
+        for (let c of confetti) {
+            setTimeout(() => {
+                c.style.transform = `translateY(${screen.height/2}px) rotate(${(Math.random()-0.5)*180}deg)`;
+                c.style.opacity = 0;
+            }, 10);
+        }
+
+        setTimeout(() => {
+            console.log(confetti.length)
+            for (let c of confetti) {
+                c.remove();
+            }
+        }, 3000);
+    }
+
 class Stack {
-    constructor(cards) {
+    constructor(cards, empty_callback) {
         this.cards = cards;
         for (let card of cards) {
             card.stack = this;
         }
 
+        this.empty_callback = empty_callback;
+
         this.index = this.cards.length - 1;
         this.current = this.cards[this.index];
-        this.current.activate();
+    }  
+
+    add_to_container() {
+        let container = document.querySelector("#container-headlines");
+        for (let card of this.cards) {
+            container.appendChild(card.div);
+        }
     }
 
     async show_all() {
@@ -178,6 +276,7 @@ class Stack {
             await sleep(75 + Math.random() * 50);
             card.show()
         }
+        this.current.activate();
     }
 
     next() {
@@ -187,9 +286,7 @@ class Stack {
             console.log(this.index);
             this.current.activate();
         } else {
-            setTimeout(() => {
-                document.getElementById('container-wrapper').style.zIndex = '-100';
-            }, 300);
+            this.empty_callback();
         }
     }
 }
@@ -208,43 +305,34 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function show_headlines(headlines) {
 
+function headlines_to_cards(headlines) {
     let cards = []
     for (let i = 0; i < 10; i++) {
-        cards.push(new Card(headlines[i], 10 - i));
+        cards.push(new Card(headlines[i], headlines.length - i));
     }
-
-    container = document.querySelector("#container-headlines");
-    for (let card of cards) {
-        container.appendChild(card.div);
-    }
-    let stack = new Stack(cards);
-
-    document.getElementById('container-wrapper').style.zIndex = '100';
-    stack.show_all();
-    document.getElementById('container-wrapper').style.display = 'flex';
-
-    // setTimeout(function() {
-    document.getElementById('info-done').style.display = 'flex';
-    // }, 3000);
+    return cards
 }
 
-function init() {
+function get_new_headlines() {
+    return fetch("https://get-headlines.fake-or-not.workers.dev", {method: 'post'}).then(response => response.json());
+}
+
+async function play(empty_callback=play) {
+    let cards = headlines_to_cards(await get_new_headlines());
+    let stack = new Stack(cards, empty_callback=empty_callback);
+    stack.add_to_container();
+    stack.show_all();
+}
+
+async function init() {
     const queryParams = new URLSearchParams(window.location.search);
     const difficulty = queryParams.get('difficulty');
 
-    if (difficulty) {
-        const xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                const headlines = JSON.parse(this.responseText);
-                show_headlines(headlines);
-            }
-        };
-        xhttp.open("POST", "https://get-headlines.fake-or-not.workers.dev");
-        xhttp.send();
-    } else {
-        document.getElementById('difficulty').style.display = 'flex';
-    }
+    play()
 }
+
+
+
+
+
