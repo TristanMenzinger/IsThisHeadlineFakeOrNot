@@ -238,7 +238,7 @@ async function confetti_rain(color="red", amount=150) {
 
         for (let c of confetti) {
             setTimeout(() => {
-                c.style.transform = `translateY(${screen.height/2}px) rotate(${(Math.random()-0.5)*180}deg)`;
+                c.style.transform = `translateY(${screen.height/4 + Math.random() * screen.height/2}px) rotate(${(Math.random()-0.5)*180}deg)`;
                 c.style.opacity = 0;
             }, 10);
         }

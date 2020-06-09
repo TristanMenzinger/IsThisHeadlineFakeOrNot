@@ -295,7 +295,7 @@ body {
 .progressbar {
     display: inline-block;
     border-radius: 10px;
-    border: 2px solid lightgray;
+    border: 1px solid lightgray;
     height: 100%;
     width: 80%;
     max-width: 400px;
@@ -304,7 +304,7 @@ body {
 .progressbar .progress {
     height: 100%;
     width: 0%;
-    transition: 1s ease-in-out;
+    transition: 0.5s ease-in-out;
 
     background: rgb(0, 0, 0);
     background: linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(255, 98, 0, 1) 100%);
@@ -546,6 +546,7 @@ body {
     height: 70px;
     margin-top: -105px;
     margin-left: calc(50vw + min(40%, 200px) - 45px);
+    transition: 0.1s ease-in !important;
 }
 
 .mo-fire {
@@ -556,12 +557,9 @@ body {
     opacity: 0;
     margin-left: calc(50vw + min(40%, 200px) - 5px);
     
-
     margin-top: 0px;
     height: 0px;
     width: 0px;
-
-
     left: 50%;
 }
 
