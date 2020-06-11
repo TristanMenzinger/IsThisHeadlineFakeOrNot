@@ -1,6 +1,9 @@
 class Card {
-    constructor(title, count, settings) {
-        this.title = title;
+    constructor(headline_json, count, settings) {
+        this.title = headline_json.text;
+        this.is_real = headline_json.is_real;
+        this.id = headline_json.id;
+
         this.count = count;
 
         this._create_div();
@@ -148,19 +151,33 @@ class Card {
     }
 
     right() {
-        //  console.log("make it rain");
-        //  setTimeout(function() {
-        // confetti_rain();
-        //  }, 10)
-        delete_progress();
+        if(this.is_real) {
+            delete_progress();
+            submit_answer(this.id, false);
+        } else {
+            add_progress();
+            submit_answer(this.id, true);
+        }
     }
     left() {
-        // console.log("make it rain");
-        // setTimeout(function() {
-        // confetti_rain();
-        // }, 10)
-        add_progress();
+        if(!this.is_real) {
+            delete_progress();
+            submit_answer(this.id, false);
+        } else {
+            add_progress();
+            submit_answer(this.id, true);
+        }
     }
+}
+
+function submit_answer(id, was_correct) {
+    return fetch("https://fakeornot.menzinger.workers.dev", {
+        method: "post",
+        body: JSON.stringify({
+            "id": id, 
+            "correct": was_correct
+        })
+    });
 }
 
 function add_progress(percent_to_add = 10) {
@@ -176,7 +193,7 @@ function add_progress(percent_to_add = 10) {
     new_progress = progress.percent + percent_to_add;
     progress.percent = new_progress;
 
-    console.log(old_progress, new_progress)
+    // console.log(old_progress, new_progress)
 
     if (old_progress < 90 && new_progress >= 90)
         animate(container, "shake-bottom3");
@@ -342,7 +359,7 @@ function headlines_to_cards(headlines) {
 }
 
 function get_new_headlines() {
-    return fetch("https://get-headlines.fake-or-not.workers.dev", { method: 'post' }).then(response => response.json());
+    return fetch("https://fakeornot.menzinger.workers.dev").then(response => response.json());
 }
 
 async function play(empty_callback = play) {
