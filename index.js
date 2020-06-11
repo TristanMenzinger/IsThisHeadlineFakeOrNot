@@ -1,4 +1,4 @@
-let DEV = true;
+let DEV = false;
 
 class Card {
     constructor(headline_json, count, settings) {
