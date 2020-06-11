@@ -92,12 +92,17 @@ body {
     padding: 20px;
     overflow: none;
 
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Old versions of Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none;
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Old versions of Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
 }
 
 .swipe-card .card-body {
@@ -236,7 +241,8 @@ body {
     position: absolute;
     text-decoration: underline;
 }
-#about > a {
+
+#about>a {
     font-size: 10pt;
     color: darkgray;
 }
@@ -335,20 +341,32 @@ body {
     text-align: left;
     text-align: right;
 }
+
 .progressbar .count.highlight {
     -webkit-animation: highlightkf 0.5s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
     animation: highlightkf 0.5s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
 }
 
+.progressbar .description {
+    position: absolute;
+    color: darkgray;
+    font-size: 10pt;
+    margin-top: -20px;
+}
+
 @-webkit-keyframes highlightkf {
-    0%, 100% {
-        transform: scale(1,1);
-    }
-    50% {
-        transform: scale(2,2);
-    }
+
+    0%,
     100% {
-        transform: scale(1,1);
+        transform: scale(1, 1);
+    }
+
+    50% {
+        transform: scale(2, 2);
+    }
+
+    100% {
+        transform: scale(1, 1);
     }
 }
 
@@ -715,3 +733,10 @@ body {
         transform: translate(-20px, -100px) rotate(180deg);
         opacity: 0;
     }
+}
+
+@media only screen and (max-height: 700px) {
+    .card-text {
+        font-size: 15pt;
+    }
+}
