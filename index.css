@@ -19,6 +19,8 @@ body {
     max-width: 400px;
 
     will-change: transform;
+
+    cursor: pointer;
 }
 
 .swipe-card.smooth {
