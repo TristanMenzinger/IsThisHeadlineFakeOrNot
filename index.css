@@ -108,7 +108,7 @@ body {
 
 .card-text {
     padding: 15px;
-
+    padding-top: 0px;
     max-height: 90%;
     overflow: hidden;
 
@@ -124,6 +124,7 @@ body {
 .card-count {
     margin-left: auto;
     color: darkgray;
+    float: right;
 }
 
 .card-difficulty {
