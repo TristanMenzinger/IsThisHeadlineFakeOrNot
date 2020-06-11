@@ -235,14 +235,20 @@ body {
     max-width: 400px;
 }
 
-#about {
-    right: 3em;
-    top: 3em;
+#github, #about {
     position: absolute;
     text-decoration: underline;
+    right: 3em;
+}
+#about {
+    top: 3em;
+}
+#github {
+    top: 3em;
+    right: 6em;
 }
 
-#about>a {
+#about > a, #github > a {
     font-size: 10pt;
     color: darkgray;
 }
