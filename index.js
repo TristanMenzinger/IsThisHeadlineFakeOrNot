@@ -35,11 +35,7 @@ class Card {
                     <div class="swipe-card overlay overlay-left"><span>Fake</span></div>
                     <div class="swipe-card overlay overlay-right"><span>Real</span></div>
                     <div class="card-body">
-                        <div class="card-info">
-                            <p class="card-count">${this.count}/10</p>
-                            <!--  <p class="card-difficulty"><span style="color: ${this.difficulty === "Easy" ? '#28a745' : this.difficulty === "Medium" ? '#ffc107' : '#dc3545'}">${this.difficulty}</span></p>  -->
-                        </div>
-                        <!-- <h5 class="card-title">Special title treatment</h5> -->
+                        <p class="card-count">${this.count}/10</p>
                         <p class="card-text">${this.title}</p>
                     </div>
                 </div>`;
