@@ -16,5 +16,5 @@ using OpenAI's [GPT-2](https://github.com/openai/gpt-2!).
 ### Who
 Made by [Robin Weitzel](https://github.com/RobinWeitzel) and [Tristan Menzinger](https://github.com/TristanMenzinger).
 
-### DISCLAIMER
+### Disclaimer
 Half of the headlines are from the Huffington Post, the other half is machine generated. We do not claim authenticity for any of these headlines. The headlines are posted for comedic purposes only and not meant to attack anyone. If you find a headline offensive please get in touch via GitHub.
