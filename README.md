@@ -12,7 +12,6 @@ We made this to show two things:
 ### How
 * We trained the network on 200'000 real headlines from the [Huffington Post](https://www.huffpost.com)
 using OpenAI's [GPT-2](https://github.com/openai/gpt-2!). If you want to experiment yourself, you can find the dataset [here](https://www.kaggle.com/rmisra/news-category-dataset).
-
 * Hosted on Github Pages using Cloudflare Workers & Key-Value store. Using native CSS transforms for the animations.
 
 
