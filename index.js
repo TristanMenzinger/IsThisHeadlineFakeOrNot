@@ -35,7 +35,7 @@ class Card {
                     <div class="swipe-card overlay overlay-left"><span>Fake</span></div>
                     <div class="swipe-card overlay overlay-right"><span>Real</span></div>
                     <div class="card-body">
-                        <p class="card-count">${this.count}/10</p>
+                        <!--<p class="card-count">${this.count}/10</p>-->
                         <p class="card-text">${this.title}</p>
                     </div>
                 </div>`;
