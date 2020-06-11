@@ -1,4 +1,4 @@
-# FakeOrNotHeadline
+# Is this Headline Fake or Not?
 
 We live in crazy times - but can you tell how crazy? Visit [isthisheadlinefake.com](https://isthisheadlinefake.com) to find out. 
 
