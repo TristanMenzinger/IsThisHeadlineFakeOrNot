@@ -181,10 +181,13 @@ body {
 #container-title {
     align-self: center;
     padding: 3em;
+    padding-top: 2em;
     padding-bottom: 2em;
 
     width: 100%;
     max-width: 500px;
+
+    position: relative;
 }
 
 #container-title h1 {
@@ -225,6 +228,17 @@ body {
     height: calc(100% - 3em - 10em);
     width: 80%;
     max-width: 400px;
+}
+
+#about {
+    right: 3em;
+    top: 3em;
+    position: absolute;
+    text-decoration: underline;
+}
+#about > a {
+    font-size: 10pt;
+    color: darkgray;
 }
 
 #info-done-results {

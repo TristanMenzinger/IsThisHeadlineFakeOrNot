@@ -1,3 +1,5 @@
+let DEV = true;
+
 class Card {
     constructor(headline_json, count, settings) {
         this.title = headline_json.text;
@@ -171,13 +173,17 @@ class Card {
 }
 
 function submit_answer(id, was_correct) {
-    return fetch("https://fakeornot.menzinger.workers.dev", {
-        method: "post",
-        body: JSON.stringify({
-            "id": id, 
-            "correct": was_correct
-        })
-    });
+    if(!DEV) {
+        return fetch("https://fakeornot.menzinger.workers.dev", {
+            method: "post",
+            body: JSON.stringify({
+                "id": id, 
+                "correct": was_correct
+            })
+        });
+    }else {
+        console.log("process not submitted - dev mode")
+    }
 }
 
 function add_progress(percent_to_add = 10) {
@@ -359,7 +365,7 @@ function headlines_to_cards(headlines) {
 }
 
 function get_new_headlines() {
-    return fetch("https://fakeornot.menzinger.workers.dev").then(response => response.json());
+    return fetch("https://fakeornot.menzinger.workers.dev?headlines="+Math.round(Math.random()*999)).then(response => response.json());
 }
 
 async function play(empty_callback = play) {
