@@ -237,20 +237,24 @@ body {
     max-width: 400px;
 }
 
-#github, #about {
+#github,
+#about {
     position: absolute;
     text-decoration: underline;
     right: 3em;
 }
+
 #about {
     top: 3em;
 }
+
 #github {
     top: 3em;
     right: 6em;
 }
 
-#about > a, #github > a {
+#about>a,
+#github>a {
     font-size: 10pt;
     color: darkgray;
 }
@@ -386,6 +390,66 @@ body {
     background: rgb(0, 0, 0);
     background: linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(255, 98, 0, 1) 100%);
     background-size: max(100%, 400px);
+}
+
+
+/*TEXT FLY-IN*/
+#flyin {
+    position: absolute;
+
+    top: 75%;
+    left: calc(50% - min(50vw, 300px));
+
+    height: 100px;
+    width: 100vw;
+    max-width: 600px;
+
+    text-align: center;
+
+    transform: rotate(0deg);
+    transition: transform 0s linear;
+}
+
+#flyin.fly {
+    z-index: 1000;
+}
+
+#flyin > #flyin-text {
+    position: absolute;
+    
+    text-align: center;
+
+    left: 0;
+    top: 0;
+    width: 100%;
+    color: darkgray;
+    font-size: 25pt;
+    font-weight: 600;
+    opacity: 0;
+}
+
+#flyin.fly #flyin-text {
+    animation: fly-in-animation 1s linear;
+}
+
+@-webkit-keyframes fly-in-animation {
+    0% {
+        opacity: 0;
+        transform: scale(1.3);
+    }
+    20% {
+        opacity: 1;
+        transform: scale(1.3);
+    }
+
+    80% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(0.75);
+        opacity: 0;
+    }
 }
 
 

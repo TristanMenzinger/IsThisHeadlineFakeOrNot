@@ -1,5 +1,25 @@
 let DEV = false;
 
+const FALSE_POSITIVE = 100;
+const FALSE_NEGATIVE = 200;
+
+const FALSE_NEGATIVE_SENTENCES = [
+    "That one was fake",
+    "That didn't happen",
+    "Nope, that was fake",
+    "That didn't happen",
+    "Could've happened"
+];
+
+const FALSE_POSITIVE_SENTENCES = [
+    "That really happend",
+    "Yea, that was real",
+    "Nope, that was real",
+    "That one was real",
+    "Uhh, that actually happened"
+];
+
+
 class Card {
     constructor(headline_json, count, settings) {
         this.title = headline_json.text;
@@ -142,24 +162,29 @@ class Card {
             this.gone = true;
 
             if (direction < 0)
-                this.right();
-            else
                 this.left();
+            else
+                this.right();
         }
     }
 
-    right() {
+    // Opinion Real
+    left() {
         if(this.is_real) {
-            delete_progress();
+            delete_progress(FALSE_POSITIVE);
+
             submit_answer(this.id, false);
         } else {
             add_progress();
             submit_answer(this.id, true);
         }
     }
-    left() {
+
+    // Opinion Fake
+    right() {
         if(!this.is_real) {
-            delete_progress();
+            delete_progress(FALSE_NEGATIVE);
+
             submit_answer(this.id, false);
         } else {
             add_progress();
@@ -236,7 +261,26 @@ function animate(element, animation_class, time = 500) {
     }, time);
 }
 
-function delete_progress() {
+function delete_progress(type) {
+
+
+    if(type) {
+        let text;
+
+        if(type == FALSE_NEGATIVE)
+            text = FALSE_NEGATIVE_SENTENCES[Math.floor(Math.random()*FALSE_NEGATIVE_SENTENCES.length)];
+        else
+            text = FALSE_POSITIVE_SENTENCES[Math.floor(Math.random()*FALSE_POSITIVE_SENTENCES.length)];
+
+        let flyin = document.getElementById("flyin");
+        let flyin_text = flyin.querySelector("#flyin-text");
+        flyin_text.textContent = text;
+
+        flyin.style.transform = `rotate(${(Math.random()-0.5)*30}deg)`;
+
+        animate(flyin, "fly", 1000);
+    } 
+
     let progress = document.querySelector(".progress");
     let progressbar = document.querySelector(".progressbar");
     let container = document.querySelector("#container-streak");
