@@ -6,7 +6,7 @@ We live in crazy times - but can you tell how crazy? Visit [isthisheadlinefake.c
 
 ### Why
 We made this to show two things:
-* Neural networks have become incredibly good at producing gramatically correct but completely nonsensical text
+* Neural networks have become incredibly good at producing grammatically correct but completely nonsensical text
 * There are so many nonsensical headlines nowadays, it's hard to distinguish fake from real
 
 ### How
