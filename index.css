@@ -807,8 +807,48 @@ body {
     }
 }
 
+/*Seriously small screen handling */
 @media only screen and (max-height: 700px) {
     .card-text {
         font-size: 15pt;
     }
+
+    #container-title .instructions {
+        font-size: 8pt;
+    }
+
+    #container-title {
+        padding: 2em;
+    }
+    #container-title h4 {
+        font-size: 1.2rem;
+    }
+    #container-title h1 {
+        font-size: 2rem;
+    }
+
+    #github a, #about a {
+        font-size: 8pt;
+    }
+    #about {
+        right: 2em;
+    }
+    #github {
+        right: 4.5em;
+    }
+
+    .progressbar .description {
+        font-size: 8pt;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
