@@ -184,6 +184,9 @@ body {
 #info-done>span>* {
     margin-right: 5px;
 }
+#container-headlines {
+	max-height: 800px;
+}
 
 #container-title {
     align-self: center;
@@ -328,7 +331,8 @@ body {
 
 #container-streak {
     position: absolute;
-    bottom: 15px;
+    /*bottom: 15px;*/
+    top: min(calc(100% - 25px), 965px);
     width: 100%;
     height: 10px;
     text-align: center;
