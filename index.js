@@ -405,7 +405,7 @@ function headlines_to_cards(headlines) {
 }
 
 function get_new_headlines() {
-    return fetch("https://fakeornot.menzinger.workers.dev?headlines="+Math.round(Math.random()*999)).then(response => response.json());
+    return fetch("https://get-headlines.fake-or-not.workers.dev/").then(response => response.json());
 }
 
 async function play(empty_callback = play) {
